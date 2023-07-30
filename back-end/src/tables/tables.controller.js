@@ -53,7 +53,6 @@ async function update(req, res) {
 
 // Delete the seated reservation from the given table
 async function destroy(req, res) {
-  console.log("in Destrou Controller");
   const { table_id } = req.params;
   return service.delete(table_id);
 }

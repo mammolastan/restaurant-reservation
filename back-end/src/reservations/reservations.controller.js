@@ -9,10 +9,12 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 // Check if reservation is valid
 async function reservationValid(req, res, next) {
-  const newReservation = await service.create(req.body.data);
-  req.locals = newReservation;
-  let submittedDate = new Date(newReservation.reservation_date);
-  submittedDate = new Date(submittedDate.getTime() + 240 * 60000);
+  const newReservation = req.body.data;
+  res.locals.newReservation = newReservation;
+
+  let submittedDate = new Date(
+    `${newReservation.reservation_date}T${newReservation.reservation_time}`
+  );
 
   // If reservation is on Tuesday, call error
   if (submittedDate.getDay() === 2) {
@@ -24,9 +26,9 @@ async function reservationValid(req, res, next) {
   }
 
   // display error if time before 10:30 am or after 9:30 pm
-  const hours = submittedDate.getHours();
-  const minutes = submittedDate.getMinutes() / 100;
-  const time = hours + minutes;
+  const hours = newReservation.reservation_time.slice(0, 2);
+  const minutes = newReservation.reservation_time.slice(-2);
+  const time = Number(hours) + Number(minutes) / 100;
   if (time < 10.3 || time > 21.3) {
     next({
       status: 400,
@@ -39,7 +41,8 @@ async function reservationValid(req, res, next) {
 
 // Request handlers
 async function list(req, res) {
-  const { date } = req.query;
+  let { date } = req.query;
+  if (date === "undefined") date = new Date();
   const reservations = await service.list(date);
   res.json({
     data: reservations,
@@ -47,14 +50,10 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  console.log("in create");
-  console.log("req.body");
-  console.log(req.body);
-  const { newReservation } = req.locals;
-
-  console.log("newReservation");
-  console.log(newReservation);
-  res.status(201).json({ newReservation });
+  const { newReservation } = res.locals;
+  const createdReservation = await service.create(newReservation);
+  console.log(createdReservation);
+  res.status(201).json({ data: createdReservation });
 }
 
 // Get One specific reservation

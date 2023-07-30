@@ -6,6 +6,7 @@ import {
 import { listTables } from "../utils/api";
 
 function Seat() {
+  // Reservation ID passed in query parameters
   const { reservation_id } = useParams();
   const history = useHistory();
   const [tables, setTables] = useState(null);
@@ -13,8 +14,8 @@ function Seat() {
   const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
+  // Get this reservation from API, put into State
   async function getReservation() {
-    // Get this reservation from API
     const url = `${API_BASE_URL}/reservations/${reservation_id}`;
     const response = await fetch(url);
     const { data: thisReservation } = await response.json();
@@ -42,25 +43,31 @@ function Seat() {
   const submitHandler = async (event) => {
     event.preventDefault();
 
+    // Get table id from the value of the option selected.
     const selectedTable_id = event.target.table.value;
+
+    // Filter through Tables to get full table details of this table
     const selectedTable = tables.filter(
       (table) => table.table_id == selectedTable_id
     )[0];
 
-    const response = await fetch(`${API_BASE_URL}/tables`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: { table: selectedTable, reservation } }),
-    });
-    const returnedFromServer = await response.json();
+    // If the table capacity can fit this reservation, proceed. Otherwise, do nothing.
+    if (selectedTable.capacity >= reservation.people) {
+      const response = await fetch(`${API_BASE_URL}/tables`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: { table: selectedTable, reservation } }),
+      });
+      await response.json();
 
-    history.push(`/dashboard`);
+      history.push(`/dashboard`);
+    }
   };
 
   useEffect(() => {}, [reservation]);
 
   useEffect(() => {
-    //   Get tables from API
+    //   Get all tables from API
     listTables().then(setTables);
     // get this one reservation
     getReservation();
@@ -87,7 +94,7 @@ function Seat() {
         <label htmlFor="table">Choose a table:</label>
         <select
           id="table"
-          name="table"
+          name="table_id"
         >
           {tables && renderTablesDropdown()}
         </select>

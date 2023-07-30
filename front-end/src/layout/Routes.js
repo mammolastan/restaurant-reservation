@@ -35,6 +35,9 @@ function Routes() {
       <Route path="/reservations/:reservation_id/seat">
         <Seat />
       </Route>
+      <Route path="/dashboard/:displayDate">
+        <Dashboard />
+      </Route>
       <Route path="/dashboard">
         <Dashboard />
       </Route>

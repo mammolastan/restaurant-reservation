@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsDisplay from "../reservations/ReservationsDisplay";
 import TablesDisplay from "../tables/TablesDisplay";
 import "./Dashboard.css";
-import { today } from "../utils/date-time";
 import DashboardNavigation from "./DashboardNavigation";
+import { today } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -14,7 +15,13 @@ import DashboardNavigation from "./DashboardNavigation";
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [date, setDate] = useState(today());
+
+  const params = new URLSearchParams(window.location.search);
+  let displayDate = params.get("date") || today();
+
+  console.log("displayDate");
+  console.log(displayDate);
+  const [date, setDate] = useState(displayDate);
   const [tables, setTables] = useState([]);
 
   useEffect(loadDashboard, [date]);

@@ -33,12 +33,14 @@ function TablesDisplay({ table }) {
       <br />
       {/* What is a good approach to making a conditional statement here. I want to Say:
       IF tableStatus.includes(occupied) THEN show the button */}
-      <button
-        onClick={removeReservation}
-        data-table-id-finish={table.table_id}
-      >
-        Finish
-      </button>
+      {tableStatus.includes("Occupied") && (
+        <button
+          onClick={removeReservation}
+          data-table-id-finish={table.table_id}
+        >
+          Finish
+        </button>
+      )}
     </div>
   );
 }

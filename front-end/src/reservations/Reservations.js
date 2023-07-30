@@ -4,7 +4,7 @@ import "./Reservations.css";
 
 function Reservations() {
   const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState(false);
   const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
@@ -15,34 +15,38 @@ function Reservations() {
       first_name: "Dummy",
       last_name: "Head",
       mobile_number: "444-867-5309",
-      reservation_date: "2023-07-24",
-      reservation_time: "20:00",
-      people: 22,
+      reservation_date: "2023-07-31",
+      reservation_time: "20:01",
+      people: 2,
     });
   }
 
   // Update state along with form input
   const changeHandler = (event) => {
     // Clear errors
-    setErrors("");
+    setErrors(false);
 
     setFormData({ ...formData, [event.target.name]: event.target.value });
-    console.log(formData);
   };
 
   // Handler for form submit -Validate, post new reservation, redirect to dashboard
   const submitHandler = async (event) => {
     event.preventDefault();
+    let isError = false;
 
     //Validate form response
+    let submittedDate = new Date(
+      `${formData.reservation_date}T${formData.reservation_time}`
+    );
 
-    let submittedDate = new Date(formData.reservation_date);
     // Adjust date to be in Eastern US Time Zone
-    submittedDate = new Date(submittedDate.getTime() + 240 * 60000);
+    submittedDate = new Date(submittedDate.getTime());
+    // submittedDate = new Date(submittedDate.getTime() + 240 * 60000);
 
     // display error if Tuesday
     if (submittedDate.getDay() === 2) {
       console.log("Trying to set Tuesday error");
+      isError = true;
       setErrors(
         (errors) => `${errors} \nError: Reservation can not be on a Tuesday`
       );
@@ -50,15 +54,24 @@ function Reservations() {
     // display error if in the past
     if (submittedDate.getTime() < new Date().getTime()) {
       console.log("trying to set past error");
+      isError = true;
       setErrors(
         (errors) => `${errors} \n\nError: Reservation can not be in the past`
       );
     }
     // display error if time before 10:30 am or after 9:30 pm
-    const hours = submittedDate.getHours();
-    const minutes = submittedDate.getMinutes() / 100;
-    const time = hours + minutes;
+    const hours = formData.reservation_time.slice(0, 2);
+    const minutes = formData.reservation_time.slice(-2);
+    const time = Number(hours) + Number(minutes) / 100;
+    console.log("hours", hours);
+    console.log(minutes, "minutes");
+    console.log("time", time);
+    console.log("time < 10.3");
+    console.log(time < 10.3);
+    console.log("time > 21.3");
+    console.log(time > 21.3);
     if (time < 10.3 || time > 21.3) {
+      isError = true;
       setErrors(
         (errors) =>
           `${errors} \n Error: Reservation must be during the hours of 10:30 AM - 9:30 PM`
@@ -66,7 +79,8 @@ function Reservations() {
     }
 
     // If no errors, proceed
-    if (errors !== "") {
+    if (!isError) {
+      console.log("Running fetch");
       const response = await fetch(`${API_BASE_URL}/reservations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -79,8 +93,6 @@ function Reservations() {
 
   return (
     <>
-      {console.log("errors")}
-      {console.log(errors)}
       {
         errors && <div className="alert alert-danger m-2"> {errors} </div>
         // errors.map((error, index) => <ErrorAlert error={error} />)}
@@ -116,7 +128,6 @@ function Reservations() {
             name="mobile_number"
             type="tel"
             placeholder="404-915-3092"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             required={true}
             onChange={changeHandler}
             value={formData.mobile_number}

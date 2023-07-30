@@ -12,16 +12,10 @@ function create(table) {
 }
 
 function update(table_id, reservation_id) {
-  console.log("In service update");
-  console.log("table_id");
-  console.log(table_id);
-  console.log("reservation_id");
-  console.log(reservation_id);
   return knex("tables").where({ table_id }).update({ reservation_id });
 }
 
 function removeReservation(table_id) {
-  console.log("in Destrou Service");
   return knex("tables").where({ table_id }).update("reservation_id", null);
 }
 
