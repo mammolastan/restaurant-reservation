@@ -39,16 +39,24 @@ async function reservationValid(req, res, next) {
   return next();
 }
 
+
+
+//
 // Request handlers
+//
+
+// List all reservations for a specified date
 async function list(req, res) {
   let { date } = req.query;
   if (date === "undefined") date = new Date();
+  
   const reservations = await service.list(date);
   res.json({
     data: reservations,
   });
 }
 
+// Create a new reservation
 async function create(req, res) {
   const { newReservation } = res.locals;
   const createdReservation = await service.create(newReservation);
@@ -63,6 +71,13 @@ async function read(req, res) {
   res.json({
     data: thisReservation,
   });
+}
+
+// Update reservation status
+async function updateReservationStatus(req, res) {
+  // Sets reservstion status to finished
+  // Deletes the reservation from the table
+  const { reservation_id } = req.params;
 }
 
 module.exports = {

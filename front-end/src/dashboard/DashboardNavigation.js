@@ -9,6 +9,7 @@ function DashboardNavigation({ date, setDate }) {
   return (
     <div className="control">
       <button
+        key="1"
         type="button"
         className="btn btn-primary"
         onClick={function () {
@@ -18,6 +19,7 @@ function DashboardNavigation({ date, setDate }) {
         Previous
       </button>
       <button
+        key="2"
         type="button"
         className="btn btn-primary"
         onClick={function () {
@@ -27,6 +29,7 @@ function DashboardNavigation({ date, setDate }) {
         Today
       </button>
       <button
+        key="3"
         type="button"
         className="btn btn-primary"
         onClick={function () {

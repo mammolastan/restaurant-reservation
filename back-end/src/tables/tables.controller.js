@@ -30,14 +30,16 @@ async function list(req, res) {
   res.json({ data: tables });
 }
 
+// Create a new table
 async function create(req, res) {
   const table = req.body.data;
   const createdTable = await service.create(table);
 
-  res.status(201).json({ createdTable });
+  res.status(201).json({ data: createdTable });
 }
 
 // Update a table to seat a reservation
+// Also set reservation status to 'booked'
 async function update(req, res) {
   const { table, reservation } = req.body.data;
   const reservation_id = reservation.reservation_id;
@@ -47,6 +49,14 @@ async function update(req, res) {
     next({ status: 400, message: "Reservation size exceeds table size." });
   }
 
+  console.log("before setReservationStatus");
+  // Set reservation status to seated
+  const response1 = await service.setReservationStatus(
+    reservation_id,
+    "seated"
+  );
+  console.log("after setReservationStatus");
+  console.log(response1);
   const response = await service.update(table_id, reservation_id);
   res.status(201).json({ response });
 }
@@ -54,8 +64,11 @@ async function update(req, res) {
 // Delete the seated reservation from the given table
 async function destroy(req, res) {
   const { table_id } = req.params;
-  return service.delete(table_id);
+  const response = await service.delete(table_id);
+  res.status(200).json({ response });
 }
+
+
 
 module.exports = {
   list: [asyncErrorBoundary(list)],

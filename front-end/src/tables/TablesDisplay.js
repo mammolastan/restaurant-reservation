@@ -1,7 +1,8 @@
 import React from "react";
+import { listTables } from "../utils/api";
 
-function TablesDisplay({ table }) {
-  const tableStatus = table.reservation_id
+function TablesDisplay({ table, index, tables, setTables }) {
+  const tableStatus = table?.reservation_id
     ? `Occupied by reservation ${table.reservation_id}`
     : "Free";
 
@@ -9,14 +10,27 @@ function TablesDisplay({ table }) {
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
   const removeReservation = async () => {
-    const userIsSure = window.confirm("Press a button!");
+    const userIsSure = window.confirm(
+      "Is this table ready to seat new guests? This cannot be undone."
+    );
 
+    // If user is not sure, end function
     if (!userIsSure) {
       return null;
     }
+
+    // Send API request to delete this reservation from this table
     await fetch(`${API_BASE_URL}/tables/${table.table_id}/seat`, {
       method: "DELETE",
     });
+
+    const newTables = [...tables];
+    newTables[index].reservation_id = null;
+
+    setTables(newTables);
+
+    const abortController = new AbortController();
+    listTables(abortController.signal).then(setTables).catch();
   };
 
   return (
@@ -29,11 +43,9 @@ function TablesDisplay({ table }) {
       Capacity: {table.capacity}
       <br />
       Status:
-      <span data-table-id-status={tableStatus}> {tableStatus}</span>
+      <span data-table-id-status={table.table_id}> {tableStatus}</span>
       <br />
-      {/* What is a good approach to making a conditional statement here. I want to Say:
-      IF tableStatus.includes(occupied) THEN show the button */}
-      {tableStatus.includes("Occupied") && (
+      {tableStatus.toLowerCase().includes("occupied") && (
         <button
           onClick={removeReservation}
           data-table-id-finish={table.table_id}

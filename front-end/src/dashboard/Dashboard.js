@@ -19,8 +19,6 @@ function Dashboard() {
   const params = new URLSearchParams(window.location.search);
   let displayDate = params.get("date") || today();
 
-  console.log("displayDate");
-  console.log(displayDate);
   const [date, setDate] = useState(displayDate);
   const [tables, setTables] = useState([]);
 
@@ -41,6 +39,8 @@ function Dashboard() {
     return () => abortController.abort();
   }
 
+  
+
   const renderReservations = () => {
     return reservations.map((reservation, index) => {
       return (
@@ -57,6 +57,9 @@ function Dashboard() {
       return (
         <TablesDisplay
           table={table}
+          index={index}
+          tables={tables}
+          setTables={setTables}
           key={index}
         />
       );
