@@ -2,16 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationsDisplay({ reservation }) {
-  const finishReservation = async () => {
-
-    
-
-    // Send API request to delete this reservation from this table
-    await fetch(`${API_BASE_URL}/tables/${table.table_id}/seat`, {
-      method: "DELETE",
-    });
-  };
-
   return (
     <div
       key={`res-${reservation.reservation_id}`}
