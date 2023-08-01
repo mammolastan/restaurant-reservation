@@ -53,11 +53,16 @@ function Seat() {
 
     // If the table capacity can fit this reservation, proceed. Otherwise, do nothing.
     if (selectedTable.capacity >= reservation.people) {
-      const response = await fetch(`${API_BASE_URL}/tables`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: { table: selectedTable, reservation } }),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/tables/${selectedTable.table_id}/seat`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: { reservation_id: reservation.reservation_id },
+          }),
+        }
+      );
       await response.json();
 
       history.push(`/dashboard`);

@@ -61,6 +61,7 @@ function Dashboard() {
           tables={tables}
           setTables={setTables}
           key={index}
+          loadDashboard = {loadDashboard}
         />
       );
     });

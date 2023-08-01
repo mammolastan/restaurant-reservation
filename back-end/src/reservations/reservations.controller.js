@@ -76,7 +76,7 @@ async function read(req, res) {
 // Update reservation status
 async function updateReservationStatus(req, res) {
   // Sets reservstion status to finished
-  // Deletes the reservation from the table
+  // Removes the reservation from the table
   const { reservation_id } = req.params;
 }
 

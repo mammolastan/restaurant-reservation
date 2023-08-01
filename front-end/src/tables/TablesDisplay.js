@@ -1,7 +1,7 @@
 import React from "react";
 import { listTables } from "../utils/api";
 
-function TablesDisplay({ table, index, tables, setTables }) {
+function TablesDisplay({ table, index, tables, setTables, loadDashboard }) {
   const tableStatus = table?.reservation_id
     ? `Occupied by reservation ${table.reservation_id}`
     : "Free";
@@ -31,6 +31,7 @@ function TablesDisplay({ table, index, tables, setTables }) {
 
     const abortController = new AbortController();
     listTables(abortController.signal).then(setTables).catch();
+    loadDashboard();
   };
 
   return (

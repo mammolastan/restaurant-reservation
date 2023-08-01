@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -75,9 +75,9 @@ describe("US-06 - Reservation status - E2E", () => {
         path: ".screenshots/us-06-seated-before.png",
         fullPage: true,
       });
-
+      console.log("turmeric1");
       await seatReservation(reservation.reservation_id, table.table_id);
-
+      console.log("turmeric2");
       await page.reload({ waitUntil: "networkidle0" });
 
       await page.screenshot({
@@ -90,7 +90,7 @@ describe("US-06 - Reservation status - E2E", () => {
         `[data-reservation-id-status="${reservation.reservation_id}"]`,
         "seated"
       );
-
+      console.log("turmeric3");
       expect(containsSeated).toBe(true);
       expect(
         await page.$(

@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationsDisplay({ reservation }) {
+  if (reservation.status.includes("finished")) {
+    return null;
+  }
   return (
     <div
       key={`res-${reservation.reservation_id}`}
@@ -16,7 +19,7 @@ function ReservationsDisplay({ reservation }) {
       Name: {`${reservation.first_name} ${reservation.last_name}`}
       <br />
       Status:
-      <span data-reservation-id-status={reservation.id}>
+      <span data-reservation-id-status={reservation.reservation_id}>
         {reservation.status.toUpperCase()}
       </span>
       <br />
@@ -25,7 +28,6 @@ function ReservationsDisplay({ reservation }) {
           <button>Seat</button>
         </Link>
       )}
-      {reservation.status.includes("seated") && <button>Finish</button>}
     </div>
   );
 }

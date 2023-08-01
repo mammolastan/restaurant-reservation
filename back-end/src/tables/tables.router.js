@@ -14,6 +14,10 @@ router
   .post(controller.create)
   .put(controller.update);
 
-router.route("/:table_id/seat").delete(controller.delete);
+// Put request below will seat a reservation
+router
+  .route("/:table_id/seat")
+  .put(controller.update)
+  .delete(controller.delete);
 
 module.exports = router;
