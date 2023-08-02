@@ -7,9 +7,56 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 // Middleware
 
+// Check if data object is empty
+function hasData() {
+  const { data = {} } = req.body;
+  for (const prop in obj) {
+    if (Object.hasOwn(obj, prop)) {
+      next();
+    }
+  }
+  next({ status: 400, message: `No body data.` });
+}
+
+// Check if property exists in object
+function bodyDataHas(propertyName) {
+  return function (req, res, next) {
+    const { data = {} } = req.body;
+    if (data[propertyName]) {
+      return next();
+    }
+    next({ status: 400, message: `Must include a ${propertyName} property` });
+  };
+}
+
 // Check if reservation is valid
 async function reservationValid(req, res, next) {
+  let isError = false;
   const newReservation = req.body.data;
+
+  // Check properties not empty
+  if (!newReservation.first_name) isError = true;
+  if (!newReservation.last_name) isError = true;
+  if (!newReservation.mobile_number) isError = true;
+  if (!newReservation.reservation_date) isError = true;
+  if (!newReservation.reservation_time) isError = true;
+  if (!newReservation.people) isError = true;
+  if (isError) {
+    next({ status: 400, message: "The reservation data is invalid." });
+  }
+
+  // Check that reservation_date is a date
+  if (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(newReservation.reservation_date))
+    next({ status: 400, message: "The reservation_date is invalid." });
+
+  // Check that reservation_time is a time
+  if (!/^(\d{2}:\d{2})$/.test(newReservation.reservation_time))
+    next({ status: 400, message: "The reservation_time is invalid." });
+
+  // Check that people is a number
+  if (isNaN(newReservation.people))
+    next({ status: 400, message: "The people property is not a number." });
+
   res.locals.newReservation = newReservation;
 
   let submittedDate = new Date(
@@ -18,11 +65,18 @@ async function reservationValid(req, res, next) {
 
   // If reservation is on Tuesday, call error
   if (submittedDate.getDay() === 2) {
-    next({ status: 400, message: "Reservations can not be on Tuesday" });
+    next({
+      status: 400,
+      message: "Reservations can not be on Tuesday - resturant is closed",
+    });
   }
   // If reservation is in the past, call error
   if (submittedDate.getTime() < new Date().getTime()) {
-    next({ status: 400, message: "Reservations can not be in the past" });
+    next({
+      status: 400,
+      message:
+        "Reservations can not be in the past - must be made in the future",
+    });
   }
 
   // display error if time before 10:30 am or after 9:30 pm
@@ -39,7 +93,22 @@ async function reservationValid(req, res, next) {
   return next();
 }
 
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const thisReservation = await service.read(reservation_id);
+  console.log("thisReservation");
+  console.log(thisReservation);
 
+  if (thisReservation) {
+    res.locals.thisReservation = thisReservation;
+    return next();
+  }
+
+  next({
+    status: 404,
+    message: `Reservation ID ${reservation_id} not found`,
+  });
+}
 
 //
 // Request handlers
@@ -49,7 +118,7 @@ async function reservationValid(req, res, next) {
 async function list(req, res) {
   let { date } = req.query;
   if (date === "undefined") date = new Date();
-  
+
   const reservations = await service.list(date);
   res.json({
     data: reservations,
@@ -58,17 +127,18 @@ async function list(req, res) {
 
 // Create a new reservation
 async function create(req, res) {
+  console.log("in create");
   const { newReservation } = res.locals;
   const createdReservation = await service.create(newReservation);
-  console.log(createdReservation);
+
   res.status(201).json({ data: createdReservation });
 }
 
 // Get One specific reservation
 async function read(req, res) {
-  const { reservation_id } = req.params;
-  const thisReservation = await service.read(reservation_id);
-  res.json({
+  thisReservation = res.locals.thisReservation;
+
+  res.status(200).json({
     data: thisReservation,
   });
 }
@@ -82,6 +152,15 @@ async function updateReservationStatus(req, res) {
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [reservationValid, asyncErrorBoundary(create)],
-  read: [asyncErrorBoundary(read)],
+  create: [
+    bodyDataHas("first_name"),
+    bodyDataHas("last_name"),
+    bodyDataHas("mobile_number"),
+    bodyDataHas("reservation_date"),
+    bodyDataHas("reservation_time"),
+    bodyDataHas("people"),
+    reservationValid,
+    asyncErrorBoundary(create),
+  ],
+  read: [reservationExists, asyncErrorBoundary(read)],
 };

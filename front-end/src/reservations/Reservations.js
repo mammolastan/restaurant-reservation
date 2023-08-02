@@ -15,7 +15,7 @@ function Reservations() {
       first_name: "Dummy",
       last_name: "Head",
       mobile_number: "444-867-5309",
-      reservation_date: "2023-07-31",
+      reservation_date: "2023-08-05",
       reservation_time: "20:01",
       people: 2,
     });
@@ -63,13 +63,7 @@ function Reservations() {
     const hours = formData.reservation_time.slice(0, 2);
     const minutes = formData.reservation_time.slice(-2);
     const time = Number(hours) + Number(minutes) / 100;
-    console.log("hours", hours);
-    console.log(minutes, "minutes");
-    console.log("time", time);
-    console.log("time < 10.3");
-    console.log(time < 10.3);
-    console.log("time > 21.3");
-    console.log(time > 21.3);
+
     if (time < 10.3 || time > 21.3) {
       isError = true;
       setErrors(
@@ -87,7 +81,7 @@ function Reservations() {
         body: JSON.stringify({ data: formData }),
       });
       await response.json();
-      history.push(`/dashboard/${formData.reservation_date}`);
+      history.push(`/dashboard?date=${formData.reservation_date}`);
     }
   };
 

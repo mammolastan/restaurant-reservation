@@ -24,6 +24,30 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+// Middleware
+
+// Check if data object is empty
+function hasData(req, res, next) {
+  if (req.body && req.body.data) {
+    // Proceed to the next middleware
+    next();
+  } else {
+    // Proceed to next middleware with an error
+    next({ status: 400, message: `Must include body data` });
+  }
+}
+
+// Check if property exists in object
+function bodyDataHas(propertyName) {
+  return function (req, res, next) {
+    const { data = {} } = req.body;
+    if (data[propertyName]) {
+      return next();
+    }
+    next({ status: 400, message: `Must include a ${propertyName} property` });
+  };
+}
+
 async function list(req, res) {
   const tables = await service.list();
 
@@ -31,25 +55,47 @@ async function list(req, res) {
 }
 
 // Create a new table
-async function create(req, res) {
+async function create(req, res, next) {
   const table = req.body.data;
-  const createdTable = await service.create(table);
 
+  // Check that table_name length is valid
+  if (table.table_name.length <= 1)
+    return next({ status: 400, message: "table_name is too short." });
+
+  // Check that capacity is valid
+  if (!table.capacity)
+    return next({ status: 400, message: "capacity invalid" });
+
+  if (typeof table.capacity != "number")
+    next({ status: 400, message: "The capacity property is invalid." });
+
+  const createdTable = await service.create(table);
   res.status(201).json({ data: createdTable });
 }
 
 // Update a table to seat a reservation
 // Also set reservation status to 'booked'
-async function update(req, res) {
+async function update(req, res, next) {
   const { reservation_id } = req.body.data;
   const { table_id } = req.params;
 
   const table = await service.readTable(table_id);
   const reservation = await service.readReservation(reservation_id);
 
+  // Check if reservation exists
+  if (!reservation) {
+    next({
+      status: 404,
+      message: `Reservation_id ${reservation_id} not found`,
+    });
+  }
+
   // If reservation size is too big for this table
   if (reservation.people > table.capacity) {
-    next({ status: 400, message: "Reservation size exceeds table size." });
+    next({
+      status: 400,
+      message: "Not enough capacity - reservation size exceeds table size.",
+    });
   }
 
   // Check that table is not already occupied
@@ -69,7 +115,7 @@ async function update(req, res) {
   console.log("after setReservationStatus");
   console.log(response1);
   const response = await service.update(table_id, reservation_id);
-  res.status(201).json({ response });
+  res.status(200).json({ response });
 }
 
 // Delete the seated reservation from the given table - Delete data from 'reservation_id' column
@@ -90,7 +136,11 @@ async function destroy(req, res) {
 
 module.exports = {
   list: [asyncErrorBoundary(list)],
-  create: [asyncErrorBoundary(create)],
-  update: [asyncErrorBoundary(update)],
+  create: [
+    bodyDataHas("table_name"),
+    bodyDataHas("capacity"),
+    asyncErrorBoundary(create),
+  ],
+  update: [hasData, bodyDataHas("reservation_id"), asyncErrorBoundary(update)],
   delete: destroy,
 };
