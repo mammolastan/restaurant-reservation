@@ -70,9 +70,7 @@ async function create(req, res, next) {
   if (!table.capacity)
     return next({ status: 400, message: "capacity invalid" });
 
-  if (typeof table.capacity != "number")
-    next({ status: 400, message: "The capacity property is invalid." });
-
+  
   const createdTable = await service.create(table);
   res.status(201).json({ data: createdTable });
 }
