@@ -37,6 +37,10 @@ function hasData(req, res, next) {
   }
 }
 
+function addTwoNumbers(numOne, numTwo) {
+  return numOne + numTwo;
+}
+
 // Check if property exists in object
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
@@ -90,6 +94,11 @@ async function update(req, res, next) {
     });
   }
 
+  // If reservation is already seated
+  if (reservation.status == "seated") {
+    return next({ status: 400, message: `Reservation is already seated` });
+  }
+
   // If reservation size is too big for this table
   if (reservation.people > table.capacity) {
     next({
@@ -120,9 +129,26 @@ async function update(req, res, next) {
 
 // Delete the seated reservation from the given table - Delete data from 'reservation_id' column
 // Also set associated reservation status to "finished"
-async function destroy(req, res) {
+async function destroy(req, res, next) {
   const { table_id } = req.params;
+
   const table = await service.readTable(table_id);
+  console.log("table");
+  console.log(table);
+
+  // Error if table doesnt exist
+  if (!table) {
+    return next({ status: 404, message: `Table id ${table_id} not found` });
+  }
+
+  // Error if table is not occupied
+  if (!table.reservation_id) {
+    return next({
+      status: 400,
+      message: `Table id ${table_id} is not occupied`,
+    });
+  }
+
   const reservation_id = table.reservation_id;
   // Set reservation status to finished
   const response1 = await service.setReservationStatus(

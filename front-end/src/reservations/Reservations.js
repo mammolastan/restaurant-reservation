@@ -14,8 +14,8 @@ function Reservations() {
     setFormData({
       first_name: "Dummy",
       last_name: "Head",
-      mobile_number: "444-867-5309",
-      reservation_date: "2023-08-05",
+      mobile_number: "555-867-5309",
+      reservation_date: "2023-08-16",
       reservation_time: "20:01",
       people: 2,
     });
