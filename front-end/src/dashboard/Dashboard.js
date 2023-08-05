@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsDisplay from "../reservations/ReservationsDisplay";
 import TablesDisplay from "../tables/TablesDisplay";
@@ -46,6 +46,7 @@ function Dashboard() {
     return reservations.map((reservation, index) => {
       return (
         <ReservationsDisplay
+          loadDashboard={loadDashboard}
           reservation={reservation}
           key={index}
         />

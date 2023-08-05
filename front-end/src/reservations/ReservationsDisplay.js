@@ -1,7 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
-function ReservationsDisplay({ reservation }) {
+function ReservationsDisplay({ reservation, loadDashboard }) {
+  const API_BASE_URL =
+    process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
+  const cancelReservation = async () => {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const response = await fetch(
+        `${API_BASE_URL}/reservations/${reservation.reservation_id}/status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: { status: "cancelled" },
+          }),
+        }
+      );
+      await response.json();
+      loadDashboard();
+    }
+  };
+
   if (reservation.status.includes("finished")) {
     return null;
   }
@@ -27,6 +50,17 @@ function ReservationsDisplay({ reservation }) {
         <Link to={`/reservations/${reservation.reservation_id}/seat`}>
           <button>Seat</button>
         </Link>
+      )}
+      <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+        <button>Edit</button>
+      </Link>
+      {reservation.status != "cancelled" && (
+        <button
+          data-reservation-id-cancel={reservation.reservation_id}
+          onClick={cancelReservation}
+        >
+          Cancel
+        </button>
       )}
     </div>
   );

@@ -1,33 +1,43 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import "./Reservations.css";
+import React, { useEffect, useState } from "react";
+import {
+  useParams,
+  useHistory,
+} from "react-router-dom/cjs/react-router-dom.min";
+import { formatAsDate } from "../utils/date-time";
 
-function Reservations() {
-  const [formData, setFormData] = useState({});
-  const [errors, setErrors] = useState(false);
+function Edit() {
   const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
+  const [reservation, setReservation] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState(false);
 
-  let history = useHistory();
+  const { reservation_id } = useParams();
+  const history = useHistory();
 
-  function fillWithDummyData() {
-    setFormData({
-      first_name: "Change",
-      last_name: Date.now().toString(10),
-      mobile_number: "800-555-1616",
-      reservation_date: "2035-01-04",
-      reservation_time: "14:00",
-      people: 4,
-    });
+  async function getReservation() {
+    const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+    const response = await fetch(url);
+    const { data: thisReservation } = await response.json();
+    thisReservation.reservation_date = formatAsDate(
+      thisReservation.reservation_date
+    );
+    setReservation(thisReservation);
   }
 
-  // Update state along with form input
-  const changeHandler = (event) => {
-    // Clear errors
-    setErrors(false);
+  //   Get reservation upon page load
+  useEffect(getReservation, []);
 
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
+  //   set reservation to the form data upon load
+  useEffect(
+    function () {
+      setFormData(reservation);
+    },
+    [reservation]
+  );
+
+  //   Set indicator if reservation is unable to be edited
+  const editable = reservation?.status == "booked" ? true : false;
 
   // Handler for form submit -Validate, post new reservation, redirect to dashboard
   const submitHandler = async (event) => {
@@ -75,29 +85,36 @@ function Reservations() {
     // If no errors, proceed
     if (!isError) {
       console.log("Running fetch");
-      const response = await fetch(`${API_BASE_URL}/reservations`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: formData }),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/reservations/${reservation_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ data: formData }),
+        }
+      );
       await response.json();
       history.push(`/dashboard?date=${formData.reservation_date}`);
     }
   };
 
+  // Update state along with form input
+  const changeHandler = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  if (!formData || !reservation) {
+    return <p>LOADING...</p>;
+  }
+
   return (
     <>
-      {
-        errors && <div className="alert alert-danger m-2"> {errors} </div>
-        // errors.map((error, index) => <ErrorAlert error={error} />)}
-      }
-
       <form
         name="reservation-create"
         onSubmit={submitHandler}
       >
         <fieldset>
-          <legend>Make a new reservation</legend>
+          <legend>Edit reservation #{reservation.reservation_id}</legend>
           <label htmlFor="first_name">First name:</label>
           <input
             id="first_name"
@@ -156,7 +173,13 @@ function Reservations() {
             value={formData.people}
           />
         </fieldset>
-        <button type="submit">Save</button>
+        {editable ? (
+          <button type="submit">Submit</button>
+        ) : (
+          <p>
+            Reservation with status of {reservation.status} can not be edited
+          </p>
+        )}
       </form>
       <button
         onClick={function () {
@@ -165,13 +188,8 @@ function Reservations() {
       >
         Cancel
       </button>
-      <br />
-      <br />
-      <br />
-      <br />
-      <button onClick={fillWithDummyData}>Fill with Dummy Data</button>
     </>
   );
 }
 
-export default Reservations;
+export default Edit;
