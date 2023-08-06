@@ -53,7 +53,7 @@ function Search() {
           />
         </fieldset>
         <button
-          type="button"
+          type="submit"
           className="btn btn-primary"
         >
           Search
