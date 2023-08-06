@@ -48,16 +48,17 @@ function ReservationsDisplay({ reservation, loadDashboard }) {
       <br />
       {reservation.status.includes("booked") && (
         <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-          <button>Seat</button>
+          <button type="button" className="btn btn-primary">Seat</button>
         </Link>
       )}
       <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-        <button>Edit</button>
+        <button type="button" className="btn btn-primary">Edit</button>
       </Link>
       {reservation.status != "cancelled" && (
         <button
           data-reservation-id-cancel={reservation.reservation_id}
           onClick={cancelReservation}
+          type="button" className="btn btn-danger"
         >
           Cancel
         </button>

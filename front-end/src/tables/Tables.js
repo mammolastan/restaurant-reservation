@@ -57,12 +57,19 @@ function Tables() {
             value={formData.capacity}
           />
         </fieldset>
-        <button type="submit">Save</button>
+        <button
+          type="submit"      
+          className="btn btn-primary"
+        >
+          Save
+        </button>
       </form>
       <button
         onClick={function () {
           history.go(-1);
         }}
+        type="button"
+        className="btn btn-danger"
       >
         Cancel
       </button>

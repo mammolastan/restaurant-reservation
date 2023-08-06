@@ -52,7 +52,12 @@ function Search() {
             placeholder="Enter a customer's phone number"
           />
         </fieldset>
-        <button type="submit">Search</button>
+        <button
+          type="button"
+          className="btn btn-primary"
+        >
+          Search
+        </button>
       </form>
       <div className="reservationsContainer">
         {searchOccured && !reservations.length ? (

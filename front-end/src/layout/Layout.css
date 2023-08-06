@@ -1,4 +1,29 @@
+html,
+body,
+#root,
+.container-fluid {
+  height: 100%;
+}
+
+body {
+  background-color: #f9ead1;
+}
+
 .side-bar {
-  background-color: #393a44;
+  background-color: #99341a;
   min-width: 200px;
+}
+
+input {
+  background-color: #e6e6e6;
+  border: solid 2px #2e5f9c;
+}
+
+@media (min-width: 768px) {
+  html,
+  body,
+  #root,
+  .side-bar .container-fluid {
+    height: 100%;
+  }
 }

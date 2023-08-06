@@ -12,12 +12,12 @@ function Reservations() {
 
   function fillWithDummyData() {
     setFormData({
-      first_name: "Change",
-      last_name: Date.now().toString(10),
+      first_name: "Boris",
+      last_name: Date.now().toString(10).split("").reverse().join(""),
       mobile_number: "800-555-1616",
-      reservation_date: "2035-01-04",
+      reservation_date: "2023-08-06",
       reservation_time: "14:00",
-      people: 4,
+      people: 2,
     });
   }
 
@@ -156,12 +156,19 @@ function Reservations() {
             value={formData.people}
           />
         </fieldset>
-        <button type="submit">Save</button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+        >
+          Save
+        </button>
       </form>
       <button
         onClick={function () {
           history.go(-1);
         }}
+        type="button"
+        className="btn btn-danger"
       >
         Cancel
       </button>

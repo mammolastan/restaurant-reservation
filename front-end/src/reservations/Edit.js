@@ -174,7 +174,12 @@ function Edit() {
           />
         </fieldset>
         {editable ? (
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="btn btn-primary"
+          >
+            Submit
+          </button>
         ) : (
           <p>
             Reservation with status of {reservation.status} can not be edited
@@ -185,6 +190,8 @@ function Edit() {
         onClick={function () {
           history.go(-1);
         }}
+        type="button"
+        className="btn btn-danger"
       >
         Cancel
       </button>

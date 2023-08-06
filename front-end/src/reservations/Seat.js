@@ -4,6 +4,7 @@ import {
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
 import { listTables } from "../utils/api";
+import "./Seat.css";
 
 function Seat() {
   // Reservation ID passed in query parameters
@@ -97,18 +98,28 @@ function Seat() {
 
       <form onSubmit={submitHandler}>
         <label htmlFor="table">Choose a table:</label>
-        <select
-          id="table"
-          name="table_id"
+        <div className="select-dropdown">
+          <select
+            id="table"
+            name="table_id"
+          >
+            {tables && renderTablesDropdown()}
+          </select>
+        </div>
+        <br />{" "}
+        <button
+          type="submit"
+          className="btn btn-primary"
         >
-          {tables && renderTablesDropdown()}
-        </select>
-        <br /> <button type="submit">Seat this reservation </button>
+          Seat this reservation{" "}
+        </button>
       </form>
       <button
         onClick={function () {
           history.go(-1);
         }}
+        type="button"
+        className="btn btn-danger"
       >
         Cancel
       </button>
