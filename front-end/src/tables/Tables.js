@@ -4,11 +4,13 @@ import { useHistory } from "react-router-dom";
 function Tables() {
   const [formData, setFormData] = useState({});
   let history = useHistory();
+  const API_BASE_URL =
+    process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
   const submitHandler = async (event) => {
     console.log("in submitHandler");
     event.preventDefault();
-    const response = await fetch(`http://localhost:5001/tables`, {
+    const response = await fetch(`${API_BASE_URL}/tables`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ data: formData }),
