@@ -50,6 +50,7 @@ function TablesDisplay({ table, index, tables, setTables, loadDashboard }) {
         <button
           onClick={removeReservation}
           data-table-id-finish={table.table_id}
+          className="btn btn-primary"
         >
           Finish
         </button>

@@ -4,6 +4,7 @@ import {
   useHistory,
 } from "react-router-dom/cjs/react-router-dom.min";
 import { formatAsDate } from "../utils/date-time";
+import ReservationForm from "./ReservationForm";
 
 function Edit() {
   const API_BASE_URL =
@@ -107,85 +108,32 @@ function Edit() {
     return <p>LOADING...</p>;
   }
 
+  if (!editable) {
+    return (
+      <>
+        <p>Reservation with status of {reservation.status} can not be edited</p>
+        <button
+          onClick={function () {
+            history.go(-1);
+          }}
+          type="button"
+          className="btn btn-danger"
+        >
+          Go back
+        </button>
+      </>
+    );
+  }
+
   return (
     <>
-      <form
-        name="reservation-create"
-        onSubmit={submitHandler}
-      >
-        <fieldset>
-          <legend>Edit reservation #{reservation.reservation_id}</legend>
-          <label htmlFor="first_name">First name:</label>
-          <input
-            id="first_name"
-            name="first_name"
-            type="text"
-            required={true}
-            onChange={changeHandler}
-            value={formData.first_name}
-          />
-          <label htmlFor="last_name">Last name:</label>
-          <input
-            id="last_name"
-            name="last_name"
-            type="text"
-            required={true}
-            onChange={changeHandler}
-            value={formData.last_name}
-          />
-          <label htmlFor="mobile_number">Phone number:</label>
-          <input
-            id="mobile_number"
-            name="mobile_number"
-            type="tel"
-            placeholder="404-915-3092"
-            required={true}
-            onChange={changeHandler}
-            value={formData.mobile_number}
-          />
-          <label htmlFor="reservation_date">Date:</label>
-          <input
-            id="reservation_date"
-            name="reservation_date"
-            type="date"
-            placeholder="YYYY-MM-DD"
-            pattern="\d{4}-\d{2}-\d{2}"
-            required={true}
-            onChange={changeHandler}
-            value={formData.reservation_date}
-          />
-          <label htmlFor="reservation_time">Time:</label>
-          <input
-            id="reservation_time"
-            name="reservation_time"
-            type="time"
-            required={true}
-            onChange={changeHandler}
-            value={formData.reservation_time}
-          />
-          <label htmlFor="people">Party size:</label>
-          <input
-            id="people"
-            name="people"
-            type="number"
-            required={true}
-            onChange={changeHandler}
-            value={formData.people}
-          />
-        </fieldset>
-        {editable ? (
-          <button
-            type="submit"
-            className="btn btn-primary"
-          >
-            Submit
-          </button>
-        ) : (
-          <p>
-            Reservation with status of {reservation.status} can not be edited
-          </p>
-        )}
-      </form>
+      <h1>Edit reservation</h1>
+      <ReservationForm
+        submitHandler={submitHandler}
+        changeHandler={changeHandler}
+        formData={formData}
+      />
+
       <button
         onClick={function () {
           history.go(-1);
