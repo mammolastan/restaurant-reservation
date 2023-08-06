@@ -91,7 +91,7 @@ function Reservations() {
         errors && <div className="alert alert-danger m-2"> {errors} </div>
         // errors.map((error, index) => <ErrorAlert error={error} />)}
       }
-
+    <h1>New reservation</h1>
       <form
         name="reservation-create"
         onSubmit={submitHandler}

@@ -74,7 +74,9 @@ function isValidDate(req, res, next) {
   if (isNaN(Date.parse(data["reservation_date"]))) {
     return next({ status: 400, message: `Invalid reservation_date` });
   }
-  if (day === 2) {
+
+  const dayOfWeek = reservationDateTime.getDay();
+  if (dayOfWeek === 2) {
     return next({ status: 400, message: `Restaurant is closed on Tuesdays` });
   }
 

@@ -11,10 +11,29 @@ form label {
 }
 
 .reservation {
-  border: 1px solid black;
+  position: relative;
+  border: 1px solid #2e5f9c;
   margin: 10px;
   padding: 10px;
   min-width: 250px;
+}
+
+.reservation.booked {
+  background-color: #ffffe1;
+}
+.reservation.seated {
+  background-color: #e0edff;
+}
+.reservation.cancelled {
+  background-color: #ff99a1;
+}
+
+.reservation .id {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  font-size: 0.5em;
 }
 
 .alert-danger {

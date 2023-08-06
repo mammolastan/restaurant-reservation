@@ -31,8 +31,9 @@ function ReservationsDisplay({ reservation, loadDashboard }) {
   return (
     <div
       key={`res-${reservation.reservation_id}`}
-      className="reservation"
+      className={`reservation ${reservation.status}`}
     >
+      <div className="id">{reservation.reservation_id}</div>
       Time: {reservation.reservation_time}
       <br />
       Size: {reservation.people}
@@ -43,22 +44,33 @@ function ReservationsDisplay({ reservation, loadDashboard }) {
       <br />
       Status:
       <span data-reservation-id-status={reservation.reservation_id}>
-        {reservation.status.toUpperCase()}
+        {` ${reservation.status.toUpperCase()}`}
       </span>
       <br />
       {reservation.status.includes("booked") && (
         <Link to={`/reservations/${reservation.reservation_id}/seat`}>
-          <button type="button" className="btn btn-primary">Seat</button>
+          <button
+            type="button"
+            className="btn btn-primary"
+          >
+            Seat
+          </button>
         </Link>
       )}
       <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-        <button type="button" className="btn btn-primary">Edit</button>
+        <button
+          type="button"
+          className="btn btn-primary"
+        >
+          Edit
+        </button>
       </Link>
       {reservation.status != "cancelled" && (
         <button
           data-reservation-id-cancel={reservation.reservation_id}
           onClick={cancelReservation}
-          type="button" className="btn btn-danger"
+          type="button"
+          className="btn btn-danger"
         >
           Cancel
         </button>

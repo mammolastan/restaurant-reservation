@@ -75,7 +75,7 @@ function Dashboard() {
 
       <div className="reservations-base">
         <div className="d-md-flex mb-3">
-          <h4 className="mb-0">Reservations for {date}</h4>
+          <h4 className="mb-0">Your reservations for {new Date(date).toDateString()}</h4>
         </div>
         <DashboardNavigation
           date={date}
@@ -85,7 +85,7 @@ function Dashboard() {
         <div className="reservationsContainer">{renderReservations()}</div>
       </div>
       <div className="tables-base">
-        <h4 className="mb-0">Tables status</h4>
+        <h4 className="mb-0">Your tables</h4>
         {renderTables()}
       </div>
     </main>

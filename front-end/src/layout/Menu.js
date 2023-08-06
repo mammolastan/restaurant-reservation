@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
+import logo from "../img/Periodic-Table-icon.png";
 
 /**
  * Defines the menu for this application.
@@ -17,31 +18,47 @@ function Menu() {
           to="/"
         >
           <div className="sidebar-brand-text mx-3">
+            <img id='logo' src={logo}></img>
             <span>Periodic Tables</span>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
-        <ul className="nav navbar-nav text-dark" id="accordionSidebar">
+        <ul
+          className="nav navbar-nav text-dark"
+          id="accordionSidebar"
+        >
           <li className="nav-item">
-            <Link className="nav-link" to="/dashboard">
+            <Link
+              className="nav-link"
+              to="/dashboard"
+            >
               <span className="oi oi-dashboard" />
               &nbsp;Dashboard
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/search">
+            <Link
+              className="nav-link"
+              to="/search"
+            >
               <span className="oi oi-magnifying-glass" />
               &nbsp;Search
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/reservations/new">
+            <Link
+              className="nav-link"
+              to="/reservations/new"
+            >
               <span className="oi oi-plus" />
               &nbsp;New Reservation
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/tables/new">
+            <Link
+              className="nav-link"
+              to="/tables/new"
+            >
               <span className="oi oi-layers" />
               &nbsp;New Table
             </Link>
