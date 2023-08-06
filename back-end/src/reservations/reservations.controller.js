@@ -69,7 +69,14 @@ function isValidDate(req, res, next) {
   if (day === 2) {
     return next({ status: 400, message: `Restaurant is closed on Tuesdays` });
   }
-  if (reservation_date < new Date()) {
+
+  console.log("new Date()");
+  console.log(new Date().setHours(23, 23, 0, 0));
+  console.log("reservation_date");
+  console.log(reservation_date.setHours(23, 23, 0, 0));
+  console.log(reservation_date.setHours(23, 23, 0, 0) < new Date());
+
+  if (reservation_date < new Date().setHours(23, 23, 0, 0)) {
     return next({
       status: 400,
       message: `Reservation must be set in the future`,
@@ -156,15 +163,6 @@ async function list(req, res) {
     : service.list(req.query.date));
 
   res.json({ data });
-
-  // let { date } = req.query;
-
-  // if (date === "undefined") date = new Date();
-
-  // const reservations = await service.list(date);
-  // res.json({
-  //   data: reservations,
-  // });
 }
 
 // Create a new reservation
@@ -187,7 +185,6 @@ async function read(req, res) {
 
 // Update the details of a reservation
 async function update(req, res, next) {
-  console.log("in the update function in controller");
   const { reservation_id } = req.params;
   const reservation = req.body.data;
   reservation.reservation_id = reservation_id;
