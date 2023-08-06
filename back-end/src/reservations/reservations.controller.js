@@ -60,8 +60,16 @@ function isStatusValid(req, res, next) {
 
 function isValidDate(req, res, next) {
   const { data = {} } = req.body;
-  const reservation_date = new Date(data["reservation_date"]);
-  const day = reservation_date.getUTCDay();
+
+  const currentDateTime = new Date();
+
+  const reservationDate = data.reservation_date;
+  const reservationTime = data.reservation_time;
+  // Parse reservation date and time
+  const [year, month, day] = reservationDate.split("-").map(Number);
+  const [hours, minutes] = reservationTime.split(":").map(Number);
+
+  const reservationDateTime = new Date(year, month - 1, day, hours, minutes);
 
   if (isNaN(Date.parse(data["reservation_date"]))) {
     return next({ status: 400, message: `Invalid reservation_date` });
@@ -70,13 +78,7 @@ function isValidDate(req, res, next) {
     return next({ status: 400, message: `Restaurant is closed on Tuesdays` });
   }
 
-  console.log("new Date()");
-  console.log(new Date().setHours(23, 23, 0, 0));
-  console.log("reservation_date");
-  console.log(reservation_date.setHours(23, 23, 0, 0));
-  console.log(reservation_date.setHours(23, 23, 0, 0) < new Date());
-
-  if (reservation_date < new Date().setHours(23, 23, 0, 0)) {
+  if (reservationDateTime < currentDateTime) {
     return next({
       status: 400,
       message: `Reservation must be set in the future`,
