@@ -56,7 +56,6 @@ function Edit() {
 
     // display error if Tuesday
     if (submittedDate.getDay() === 2) {
-      console.log("Trying to set Tuesday error");
       isError = true;
       setErrors(
         (errors) => `${errors} \nError: Reservation can not be on a Tuesday`
@@ -64,7 +63,6 @@ function Edit() {
     }
     // display error if in the past
     if (submittedDate.getTime() < new Date().getTime()) {
-      console.log("trying to set past error");
       isError = true;
       setErrors(
         (errors) => `${errors} \n\nError: Reservation can not be in the past`
@@ -85,7 +83,6 @@ function Edit() {
 
     // If no errors, proceed
     if (!isError) {
-      console.log("Running fetch");
       const response = await fetch(
         `${API_BASE_URL}/reservations/${reservation_id}`,
         {

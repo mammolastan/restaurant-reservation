@@ -17,11 +17,9 @@ function Dashboard() {
   const [reservationsError, setReservationsError] = useState(null);
 
   const params = new URLSearchParams(window.location.search);
-  console.log('params.get("date")');
-  console.log(params.get("date"));
+
   let displayDate = params.get("date") || today();
-  console.log("displayDate");
-  console.log(displayDate);
+
   const [date, setDate] = useState(displayDate);
   const [tables, setTables] = useState([]);
 
@@ -75,7 +73,9 @@ function Dashboard() {
 
       <div className="reservations-base">
         <div className="d-md-flex mb-3">
-          <h4 className="mb-0">Your reservations for {new Date(date).toDateString()}</h4>
+          <h4 className="mb-0">
+            Your reservations for {new Date(date).toDateString()}
+          </h4>
         </div>
         <DashboardNavigation
           date={date}
@@ -84,10 +84,8 @@ function Dashboard() {
         <ErrorAlert error={reservationsError} />
         <div className="reservationsContainer">{renderReservations()}</div>
       </div>
-      <div className="tables-base">
-        <h4 className="mb-0">Your tables</h4>
-        {renderTables()}
-      </div>
+      <h4 className="mb-0">Your tables</h4>
+      <div className="tables-base">{renderTables()}</div>
     </main>
   );
 }

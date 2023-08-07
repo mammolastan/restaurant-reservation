@@ -14,10 +14,10 @@ function Reservations() {
 
   function fillWithDummyData() {
     setFormData({
-      first_name: "Boris",
-      last_name: Date.now().toString(10).split("").reverse().join(""),
+      first_name: "Steve",
+      last_name: "Stalsworth",
       mobile_number: "800-555-1616",
-      reservation_date: "2023-08-06",
+      reservation_date: "2023-08-09",
       reservation_time: "14:00",
       people: 2,
     });
@@ -47,7 +47,6 @@ function Reservations() {
 
     // display error if Tuesday
     if (submittedDate.getDay() === 2) {
-      console.log("Trying to set Tuesday error");
       isError = true;
       setErrors(
         (errors) => `${errors} \nError: Reservation can not be on a Tuesday`
@@ -55,7 +54,6 @@ function Reservations() {
     }
     // display error if in the past
     if (submittedDate.getTime() < new Date().getTime()) {
-      console.log("trying to set past error");
       isError = true;
       setErrors(
         (errors) => `${errors} \n\nError: Reservation can not be in the past`
@@ -76,7 +74,6 @@ function Reservations() {
 
     // If no errors, proceed
     if (!isError) {
-      console.log("Running fetch");
       const response = await fetch(`${API_BASE_URL}/reservations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

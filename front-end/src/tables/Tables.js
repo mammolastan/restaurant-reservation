@@ -8,22 +8,20 @@ function Tables() {
     process.env.REACT_APP_API_BASE_URL || "http://localhost:5001";
 
   const submitHandler = async (event) => {
-    console.log("in submitHandler");
     event.preventDefault();
     const response = await fetch(`${API_BASE_URL}/tables`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ data: formData }),
     });
-    console.log("before await response.json();");
+
     await response.json();
-    console.log("after await response.json();");
+
     history.push(`/dashboard/`);
   };
 
   const changeHandler = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
-    console.log(formData);
   };
 
   return (
@@ -58,7 +56,7 @@ function Tables() {
           />
         </fieldset>
         <button
-          type="submit"      
+          type="submit"
           className="btn btn-primary"
         >
           Save

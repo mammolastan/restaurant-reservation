@@ -12,8 +12,7 @@ function Search() {
   const submitHandler = async (event) => {
     event.preventDefault();
     const mobile_number = event.target.mobile_number.value;
-    console.log("mobile_number");
-    console.log(mobile_number);
+
     const abortController = new AbortController();
     listReservations({ mobile_number }, abortController.signal)
       .then(setReservations)

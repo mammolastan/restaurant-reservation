@@ -5,7 +5,7 @@ form label {
   margin-top: 10px;
 }
 
-.reservationsContainer {
+.reservationsContainer,.tables-base {
   display: flex;
   flex-wrap: wrap;
 }
