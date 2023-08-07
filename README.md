@@ -7,7 +7,7 @@ This app allows restaurant staff to manage patron reservations and seating arran
 - Manage inventory of tables for seating
 - Assign patrons to tables during their time at the restaurant
 
-The software is intended to used only by restaurant personnel when a customer calls to request a reservation. 
+The software is intended to be used by restaurant personnel when a customer calls to request a reservation, and when patrons attend the restaurant. 
 
 
 ## Existing files
