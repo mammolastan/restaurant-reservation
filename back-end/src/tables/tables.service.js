@@ -30,9 +30,6 @@ function removeReservation(table_id) {
 }
 
 function setReservationStatus(reservation_id, status) {
-  console.log("in setReservationStatus service");
-  console.log(reservation_id);
-  console.log(status);
   return knex("reservations")
     .where({ reservation_id })
     .update("status", status);

@@ -70,7 +70,6 @@ async function create(req, res, next) {
   if (!table.capacity)
     return next({ status: 400, message: "capacity invalid" });
 
-  
   const createdTable = await service.create(table);
   res.status(201).json({ data: createdTable });
 }
@@ -113,14 +112,12 @@ async function update(req, res, next) {
     });
   }
 
-  console.log("before setReservationStatus");
   // Set reservation status to seated
   const response1 = await service.setReservationStatus(
     reservation_id,
     "seated"
   );
-  console.log("after setReservationStatus");
-  console.log(response1);
+
   const response = await service.update(table_id, reservation_id);
   res.status(200).json({ response });
 }
@@ -131,8 +128,6 @@ async function destroy(req, res, next) {
   const { table_id } = req.params;
 
   const table = await service.readTable(table_id);
-  console.log("table");
-  console.log(table);
 
   // Error if table doesnt exist
   if (!table) {
@@ -154,7 +149,7 @@ async function destroy(req, res, next) {
     "finished"
   );
   const response = await service.delete(table_id);
-  console.log("setReservationStatus success:", response1);
+
   res.status(200).json({ response });
 }
 

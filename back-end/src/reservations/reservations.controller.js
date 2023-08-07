@@ -46,7 +46,6 @@ function hasValidFields(req, res, next) {
 }
 
 function isStatusValid(req, res, next) {
-  console.log("in isStatusValid");
   const { status } = req.body.data;
 
   if (status == "seated" || status == "finished") {
@@ -92,7 +91,7 @@ function isValidDate(req, res, next) {
 function isPeopleNumber(req, res, next) {
   const { people } = req.body.data;
 
-  if (typeof people != "number")
+  if (isNaN(people))
     return next({
       status: 400,
       message: "The people property is not a number.",
@@ -103,7 +102,6 @@ function isPeopleNumber(req, res, next) {
 
 // Check if property exists in object
 function bodyDataHas(propertyName) {
-  console.log("in bodyDataHas");
   return function (req, res, next) {
     const { data = {} } = req.body;
     if (data[propertyName]) {
@@ -117,8 +115,6 @@ function bodyDataHas(propertyName) {
 async function timeDuringOpenHours(req, res, next) {
   const newReservation = req.body.data;
 
-  console.log("newReservation.reservation_time");
-  console.log(newReservation.reservation_time);
   // Check that reservation_time is a valid time
 
   const timeRegex = /^(?:2[0-3]|[01]?[0-9]):[0-5][0-9](?::[0-5][0-9])?$/;
@@ -140,7 +136,6 @@ async function timeDuringOpenHours(req, res, next) {
 }
 
 async function reservationExists(req, res, next) {
-  console.log("in reservationExists");
   const { reservation_id } = req.params;
   const thisReservation = await service.read(reservation_id);
 
