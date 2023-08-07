@@ -1,12 +1,14 @@
-# Capstone: Restaurant Reservation System
+# Restaurant Reservation System
 
-> You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
-> The software is used only by restaurant personnel when a customer calls to request a reservation.
-> At this point, the customers will not access the system online.
+This app allows restaurant staff to manage patron reservations and seating arrangements. 
 
-There are no user stories for deployment: it is expected that you will deploy the application to production after you finish a user story.
+- Add, edit, update and cancel existing reservations
+- Search for reservations by phone number
+- Manage inventory of tables for seating
+- Assign patrons to tables during their time at the restaurant
 
-There are no user stories for logging: it is expected that you will add logging to the application with enough detail to help you diagnose issues in production.
+The software is intended to used only by restaurant personnel when a customer calls to request a reservation. 
+
 
 ## Existing files
 
