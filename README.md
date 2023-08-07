@@ -13,10 +13,17 @@ The software is intended to be used by restaurant personnel when a customer call
 ## What it does
 
 ### Make a new reservation
+- Restaurant staff enter details of patron reservations
+  - First and last name
+  - Phone number
+  - Size of party
+  - Date and time 
 
 ### Edit existing reservation
+- Restaurant staff can edit information on existing reservation
 
 ### Create table inventory
+- 
 
 ### Assign a reservation to a table
 
