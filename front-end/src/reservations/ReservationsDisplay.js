@@ -25,7 +25,10 @@ function ReservationsDisplay({ reservation, loadDashboard }) {
     }
   };
 
-  if (reservation.status.includes("finished")) {
+  if (
+    reservation.status.includes("finished") &&
+    !window.location.href.includes("search")
+  ) {
     return null;
   }
   return (
@@ -57,14 +60,16 @@ function ReservationsDisplay({ reservation, loadDashboard }) {
           </button>
         </Link>
       )}
-      <Link to={`/reservations/${reservation.reservation_id}/edit`}>
-        <button
-          type="button"
-          className="btn btn-primary"
-        >
-          Edit
-        </button>
-      </Link>
+      {reservation.status != "cancelled" && (
+        <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+          <button
+            type="button"
+            className="btn btn-primary"
+          >
+            Edit
+          </button>
+        </Link>
+      )}
       {reservation.status != "cancelled" && (
         <button
           data-reservation-id-cancel={reservation.reservation_id}
