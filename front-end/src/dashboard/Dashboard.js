@@ -18,9 +18,9 @@ function Dashboard() {
 
   const params = new URLSearchParams(window.location.search);
 
-  let displayDate = params.get("date") || today();
+  let initialDate = params.get("date") || today();
 
-  const [date, setDate] = useState(displayDate);
+  const [date, setDate] = useState(initialDate);
   const [tables, setTables] = useState([]);
 
   useEffect(loadDashboard, [date]);
@@ -67,6 +67,7 @@ function Dashboard() {
     });
   };
 
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -74,7 +75,7 @@ function Dashboard() {
       <div className="reservations-base">
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">
-            Your reservations for {new Date(date).toDateString()}
+            Your reservations for {date}
           </h4>
         </div>
         <DashboardNavigation
