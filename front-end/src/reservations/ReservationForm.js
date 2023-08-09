@@ -27,12 +27,18 @@ function ReservationForm({ submitHandler, changeHandler, formData }) {
             onChange={changeHandler}
             value={formData.last_name}
           />
-          <label htmlFor="mobile_number">Phone number:</label>
+          <label htmlFor="mobile_number">
+            Phone number:{" "}
+            <span>
+              <i>Format of ###-###-####</i>
+            </span>
+          </label>
           <input
             id="mobile_number"
             name="mobile_number"
             type="tel"
             placeholder="404-915-3092"
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
             required={true}
             onChange={changeHandler}
             value={formData.mobile_number}
@@ -62,6 +68,7 @@ function ReservationForm({ submitHandler, changeHandler, formData }) {
             id="people"
             name="people"
             type="number"
+            min={1}
             required={true}
             onChange={changeHandler}
             value={formData.people}
