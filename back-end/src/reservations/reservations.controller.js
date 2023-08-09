@@ -62,13 +62,14 @@ function isValidDate(req, res, next) {
 
   const currentDateTime = new Date();
 
+  currentDateTime.setHours(1);
   const reservationDate = data.reservation_date;
   const reservationTime = data.reservation_time;
   // Parse reservation date and time
   const [year, month, day] = reservationDate.split("-").map(Number);
   const [hours, minutes] = reservationTime.split(":").map(Number);
 
-  const reservationDateTime = new Date(year, month - 1, day, hours-4, minutes);
+  const reservationDateTime = new Date(year, month - 1, day, hours, minutes);
 
   if (isNaN(Date.parse(data["reservation_date"]))) {
     return next({ status: 400, message: `Invalid reservation_date` });
