@@ -39,7 +39,7 @@ function hasData(req, res, next) {
 
 function isValidCapacity(req, res, next) {
   const { capacity } = req.body.data;
-  if (typeof capacity != "number") {
+  if (isNaN(capacity)) {
     return next({ status: 400, message: "capacity must be a number" });
   }
   next();
