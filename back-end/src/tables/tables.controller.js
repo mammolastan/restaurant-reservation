@@ -37,8 +37,12 @@ function hasData(req, res, next) {
   }
 }
 
-function addTwoNumbers(numOne, numTwo) {
-  return numOne + numTwo;
+function isValidCapacity(req, res, next) {
+  const { capacity } = req.body.data;
+  if (typeof capacity != "number") {
+    return next({ status: 400, message: "capacity must be a number" });
+  }
+  next();
 }
 
 // Check if property exists in object
@@ -158,6 +162,7 @@ module.exports = {
   create: [
     bodyDataHas("table_name"),
     bodyDataHas("capacity"),
+    isValidCapacity,
     asyncErrorBoundary(create),
   ],
   update: [hasData, bodyDataHas("reservation_id"), asyncErrorBoundary(update)],

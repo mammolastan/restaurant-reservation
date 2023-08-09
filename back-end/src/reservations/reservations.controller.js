@@ -91,7 +91,7 @@ function isValidDate(req, res, next) {
 function isPeopleNumber(req, res, next) {
   const { people } = req.body.data;
 
-  if (isNaN(people))
+  if (typeof people != "number")
     return next({
       status: 400,
       message: "The people property is not a number.",
@@ -246,8 +246,8 @@ module.exports = {
     has_last_name,
     has_mobile_number,
     has_reservation_date,
-    isValidDate,
     has_reservation_time,
+    isValidDate,
     has_people,
     isPeopleNumber,
     isStatusValid,
@@ -261,8 +261,8 @@ module.exports = {
     has_last_name,
     has_mobile_number,
     has_reservation_date,
-    isValidDate,
     has_reservation_time,
+    isValidDate,
     has_people,
     isPeopleNumber,
     isStatusValid,
