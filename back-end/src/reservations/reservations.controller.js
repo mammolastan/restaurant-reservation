@@ -80,6 +80,12 @@ function isValidDate(req, res, next) {
   }
 
   if (reservationDateTime < currentDateTime) {
+    console.log("Reservation date is less than current date");
+    console.log("reservationDateTime");
+    console.log(reservationDateTime);
+    console.log("currentDateTime");
+    console.log(currentDateTime);
+    console.log(currentDateTime - reservationDateTime);
     return next({
       status: 400,
       message: `Reservation must be set in the future`,
