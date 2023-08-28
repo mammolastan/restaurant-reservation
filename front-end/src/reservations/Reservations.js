@@ -17,7 +17,7 @@ function Reservations() {
       first_name: "Steve",
       last_name: "Stalsworth",
       mobile_number: "800-555-1616",
-      reservation_date: "2023-08-10",
+      reservation_date: "2023-11-10",
       reservation_time: "14:00",
       people: 2,
     });
