@@ -67,23 +67,24 @@ function Dashboard() {
     });
   };
 
-
   return (
     <main>
       <h1>Dashboard</h1>
 
       <div className="reservations-base">
         <div className="d-md-flex mb-3">
-          <h4 className="mb-0">
-            Your reservations for {date}
-          </h4>
+          <h4 className="mb-0">Your reservations for {date}</h4>
         </div>
         <DashboardNavigation
           date={date}
           setDate={setDate}
         />
         <ErrorAlert error={reservationsError} />
-        <div className="reservationsContainer">{renderReservations()}</div>
+        <div className="reservationsContainer">
+          {reservations.length > 0
+            ? renderReservations()
+            : "No reservations for this date."}
+        </div>
       </div>
       <h4 className="mb-0">Your tables</h4>
       <div className="tables-base">{renderTables()}</div>
